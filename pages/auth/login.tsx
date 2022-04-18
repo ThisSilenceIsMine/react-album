@@ -9,6 +9,7 @@ import {
   InputRightElement,
   VStack,
 } from '@chakra-ui/react';
+import { signInWithGoogle } from 'api/firebase/auth/google';
 import { signIn } from 'api/firebase/auth/signIn';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -25,12 +26,15 @@ const Login: NextPage = () => {
 
   const onLogin = () => signIn(email, password).then(() => router.push('/'));
 
+  const onLoginWithGoogle = () =>
+    signInWithGoogle().then(() => router.push('/'));
+
   return (
     <Container height={'full'}>
       <Center height={'full'}>
         <VStack>
           <Heading>Login</Heading>
-          <Button variant="solid" width="full">
+          <Button variant="solid" width="full" onClick={onLoginWithGoogle}>
             Google
           </Button>
           <Input
