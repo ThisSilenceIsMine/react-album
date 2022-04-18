@@ -9,12 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@types/md5": "^2.3.2",
     "@types/validator": "^13.7.2",
     "firebase": "^9.6.11",
     "framer-motion": "^6",
+    "md5": "^2.3.0",
     "next": "12.1.5",
     "react": "18.0.0",
     "react-dom": "18.0.0",

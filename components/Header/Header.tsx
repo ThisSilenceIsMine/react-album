@@ -1,9 +1,31 @@
-import { Flex, Heading, useColorModeValue } from '@chakra-ui/react';
+import {
+  Avatar,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  IconButton,
+  useColorModeValue,
+} from '@chakra-ui/react';
+
+import { auth } from 'api';
+import { signOut, User } from 'firebase/auth';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { CloseIcon } from '@chakra-ui/icons';
 import { ThemeSwitch } from './ThemeSwitch';
+import { getAvatar } from 'api/getAvatar';
 
 export const Header = () => {
   const bg = useColorModeValue('white', 'whiteAlpha.200');
+
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+  }, []);
 
   return (
     <Flex
@@ -21,7 +43,18 @@ export const Header = () => {
         <Link href="/">Album</Link>
       </Heading>
 
-      <ThemeSwitch />
+      <HStack>
+        {user && <Avatar src={getAvatar(user)} size="sm" />}
+        <ThemeSwitch />
+
+        {user && (
+          <IconButton
+            onClick={() => signOut(auth)}
+            icon={<CloseIcon />}
+            aria-label="sign out"
+          />
+        )}
+      </HStack>
     </Flex>
   );
 };

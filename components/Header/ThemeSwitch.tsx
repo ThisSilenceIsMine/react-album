@@ -1,18 +1,13 @@
-import { FormControl, FormLabel, Switch, useColorMode } from '@chakra-ui/react';
-
+import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { IconButton, useColorMode } from '@chakra-ui/react';
 export const ThemeSwitch = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <FormControl display="flex" alignItems="center" width="fit-content">
-      <FormLabel htmlFor="themeToggle" mb="0" textTransform="capitalize">
-        {colorMode}
-      </FormLabel>
-      <Switch
-        id="themeToggle"
-        isChecked={colorMode === 'dark'}
-        onChange={() => toggleColorMode()}
-      />
-    </FormControl>
+    <IconButton
+      aria-label="Switch color mode"
+      onClick={toggleColorMode}
+      icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+    />
   );
 };
