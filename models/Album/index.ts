@@ -3,10 +3,9 @@ import { User } from 'firebase/auth';
 import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 
 export const createAlbum = async (user: User, title: string) => {
-  const docRef = await addDoc(collection(db, 'albums'), {
+  const docRef = await addDoc(collection(db, 'users', user.uid, 'albums'), {
     title,
     createdAt: Date.now(),
-    owner: user.uid,
   }).catch((error) => {
     console.error(error);
   });
@@ -15,9 +14,9 @@ export const createAlbum = async (user: User, title: string) => {
 };
 
 export const getUserAlbums = async (user: User) => {
-  const albumsRef = collection(db, 'albums');
+  const albumsRef = collection(db, 'users', user.uid, 'albums');
 
-  const q = query(albumsRef, where('owner', '==', user.uid));
+  const q = query(albumsRef);
 
   const querySnapshot = await getDocs(q);
 
