@@ -1,25 +1,21 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 type Predicate = {
   validate: (value: any) => boolean;
   error: string;
 };
 
-type ReturnValue = [string, (state: string) => void, string | null];
+type ReturnValue = [string, (state: string) => void, string | undefined];
 
 export const useValidatedState = (
   initialState: string,
   predicates: Predicate[]
 ): ReturnValue => {
   const [state, setState] = useState(initialState);
-  let error: string | null = null;
 
-  predicates.forEach((predicate) => {
-    if (!predicate.validate(state)) {
-      error = predicate.error;
-      return;
-    }
-  });
+  const error = predicates.find(
+    (predicate) => !predicate.validate(state)
+  )?.error;
 
   return [state, setState, error];
 };

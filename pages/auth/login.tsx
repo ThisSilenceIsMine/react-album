@@ -1,9 +1,11 @@
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
   Button,
   ButtonGroup,
   Center,
   Container,
   Heading,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
@@ -32,8 +34,8 @@ const Login: NextPage = () => {
   return (
     <Container height={'full'}>
       <Center height={'full'}>
-        <VStack>
-          <Heading>Login</Heading>
+        <VStack gap="4px">
+          <Heading marginBottom="12">Login</Heading>
           <Button variant="solid" width="full" onClick={onLoginWithGoogle}>
             Google
           </Button>
@@ -48,9 +50,14 @@ const Login: NextPage = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={() => setShow((c) => !c)}>
-                {show ? 'Hide' : 'Show'}
-              </Button>
+              <IconButton
+                aria-label="Show/Hide password"
+                h="1.75rem"
+                variant="ghost"
+                size="sm"
+                icon={show ? <ViewIcon /> : <ViewOffIcon />}
+                onClick={() => setShow((c) => !c)}
+              />
             </InputRightElement>
           </InputGroup>
 

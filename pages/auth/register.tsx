@@ -6,6 +6,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
@@ -19,6 +20,8 @@ import { useValidatedState } from 'lib/hooks/useValidatedState';
 import { signInWithGoogle } from 'api/firebase/auth/google';
 
 import { useRouter } from 'next/router';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { GoogleButton } from 'components/GoogleButton';
 
 const Register: NextPage = () => {
   const [show, setShow] = useState(false);
@@ -52,15 +55,16 @@ const Register: NextPage = () => {
   const onRegisterWithEmail = () =>
     allValid && register(email, password).then(() => router.push('/'));
 
+  const onSignUpWithGoogle = () =>
+    signInWithGoogle().then(() => router.push('/'));
+
   return (
     <Container height={'full'}>
       <Center height={'full'}>
-        <VStack>
-          <Heading>Register</Heading>
-          <Button variant="solid" width="full" onClick={signInWithGoogle}>
-            Google
-          </Button>
-          <FormControl isInvalid={!!emailError}>
+        <VStack gap="4px">
+          <Heading marginBottom="12">Register</Heading>
+          <GoogleButton onClick={onSignUpWithGoogle} />
+          <FormControl isInvalid={!!email && !!emailError} isRequired>
             <FormLabel>Email</FormLabel>
             <Input
               placeholder={'mail@mail.com'}
@@ -69,7 +73,7 @@ const Register: NextPage = () => {
             />
             {emailError && <FormErrorMessage>{emailError}</FormErrorMessage>}
           </FormControl>
-          <FormControl isInvalid={!!passwordError}>
+          <FormControl isInvalid={!!password && !!passwordError} isRequired>
             <FormLabel>Password</FormLabel>
             <InputGroup>
               <Input
@@ -79,14 +83,15 @@ const Register: NextPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <InputRightElement width="4.5rem">
-                <Button
+              <InputRightElement width="3rem">
+                <IconButton
+                  aria-label="Show/Hide password"
                   h="1.75rem"
+                  variant="ghost"
                   size="sm"
+                  icon={show ? <ViewIcon /> : <ViewOffIcon />}
                   onClick={() => setShow((c) => !c)}
-                >
-                  {show ? 'Hide' : 'Show'}
-                </Button>
+                />
               </InputRightElement>
             </InputGroup>
             {passwordError && (
@@ -94,7 +99,10 @@ const Register: NextPage = () => {
             )}
           </FormControl>
 
-          <FormControl isInvalid={!!repeatPasswordError}>
+          <FormControl
+            isInvalid={!!repeatPassword && !!repeatPasswordError}
+            isRequired
+          >
             <FormLabel>Repeat Password</FormLabel>
             <Input
               pr="4.5rem"
