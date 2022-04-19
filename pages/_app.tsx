@@ -3,16 +3,11 @@ import { Header } from 'components/Header';
 import { RouteGuard } from 'components/RouteGuard';
 import theme from 'lib/theme';
 import { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import '../public/style.css';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter();
-  const isOnAuth = router.pathname.startsWith('/auth');
-
   useEffect(() => {
-    console.log(localStorage.getItem('chakra-ui-color-mode'));
     (function () {
       try {
         var mode = localStorage.getItem('chakra-ui-color-mode');
@@ -27,15 +22,12 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <ChakraProvider resetCSS theme={theme}>
-      <Box>
-        {/* {!isOnAuth && <Header />} */}
-        <Header />
-        <RouteGuard>
-          <Box height={isOnAuth ? 'calc(100% - 40px)' : '100%'}>
-            <Component {...pageProps} />
-          </Box>
-        </RouteGuard>
-      </Box>
+      <Header />
+      <RouteGuard>
+        <Box height={'calc(100% - 56px)'}>
+          <Component {...pageProps} />
+        </Box>
+      </RouteGuard>
     </ChakraProvider>
   );
 };
