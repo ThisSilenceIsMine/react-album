@@ -14,6 +14,7 @@ import {
   Button,
   VStack,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
@@ -22,8 +23,9 @@ type Props = {
 };
 
 export const CreateAlbum = ({ onCreate }: Props) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState<string>('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const borderColor = useColorModeValue('black', 'white');
 
   const onClickHandler = () => {
     onOpen();
@@ -42,7 +44,7 @@ export const CreateAlbum = ({ onCreate }: Props) => {
       <Box
         display={'grid'}
         placeContent={'center'}
-        border="2px solid white"
+        border={`2px solid  ${borderColor}`}
         w="24"
         h="32"
         cursor={'pointer'}
