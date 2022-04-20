@@ -1,25 +1,26 @@
 import { Container, SimpleGrid } from '@chakra-ui/react';
-import { CreateAlbum } from 'components/CreateAlbum';
+import { AlbumCard } from 'components/Album/AlbumCard';
+import { CreateAlbum } from 'components/Album/CreateAlbum';
 import { useUser } from 'lib/hooks/useUser';
-import { createAlbum, getUserAlbums } from 'models/Album';
+import { createAlbum, subscribeToUserAlbums } from 'models/Album';
 import type { NextPage } from 'next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Home: NextPage = () => {
   const user = useUser();
+
+  const [albums, setAlbums] = useState<any[]>([]);
 
   useEffect(() => {
     if (!user) {
       return;
     }
 
-    getUserAlbums(user).then((snapshot) => {
-      // console.log(snapshot);
-
-      snapshot.forEach((doc) => {
-        console.log(doc.data());
-      });
+    const unsubscribe = subscribeToUserAlbums(user, (albums) => {
+      setAlbums(albums);
     });
+
+    return unsubscribe;
   }, [user]);
 
   const onCreateAlbum = (title: string) => {
@@ -32,6 +33,9 @@ const Home: NextPage = () => {
     <Container maxW="80%" h="full">
       <SimpleGrid mt="12" columns={[2, 4, 8]} spacing="4">
         <CreateAlbum onCreate={onCreateAlbum} />
+        {albums.map((album) => (
+          <AlbumCard key={album.id} title={album.title} />
+        ))}
       </SimpleGrid>
     </Container>
   );

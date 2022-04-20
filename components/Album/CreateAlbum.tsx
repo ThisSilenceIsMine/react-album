@@ -13,7 +13,7 @@ import {
   ModalHeader,
   Button,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 type Props = {
   onCreate?: (title: string) => void;
@@ -21,7 +21,6 @@ type Props = {
 
 export const CreateAlbum = ({ onCreate }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const titleInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState<string>('');
 
   const onClickHandler = () => {
@@ -31,6 +30,7 @@ export const CreateAlbum = ({ onCreate }: Props) => {
   const onCreateHandler = () => {
     if (title) {
       onClose();
+      setTitle('');
       onCreate && onCreate(title);
     }
   };

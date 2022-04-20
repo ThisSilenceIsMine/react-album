@@ -1,6 +1,15 @@
 import { db } from 'api';
 import { User } from 'firebase/auth';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  DocumentData,
+  DocumentSnapshot,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
 
 export const createAlbum = async (user: User, title: string) => {
   const docRef = await addDoc(collection(db, 'users', user.uid, 'albums'), {
@@ -13,12 +22,19 @@ export const createAlbum = async (user: User, title: string) => {
   return docRef;
 };
 
-export const getUserAlbums = async (user: User) => {
+export const subscribeToUserAlbums = (
+  user: User,
+  onUpdate: (albums: DocumentData[]) => void
+) => {
   const albumsRef = collection(db, 'users', user.uid, 'albums');
 
   const q = query(albumsRef);
 
-  const querySnapshot = await getDocs(q);
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const albums = snapshot.docs.map((doc) => doc.data());
 
-  return querySnapshot;
+    onUpdate(albums);
+  });
+
+  return unsubscribe;
 };
