@@ -3,6 +3,7 @@ import { User } from 'firebase/auth';
 import {
   addDoc,
   collection,
+  deleteDoc,
   DocumentData,
   DocumentSnapshot,
   getDocs,
@@ -37,4 +38,16 @@ export const subscribeToUserAlbums = (
   });
 
   return unsubscribe;
+};
+
+export const deleteUserAlbum = async (user: User, title: string) => {
+  const albumsRef = collection(db, 'users', user.uid, 'albums');
+
+  const q = query(albumsRef, where('title', '==', title));
+
+  getDocs(q).then((snapshot) => {
+    snapshot.forEach((doc) => {
+      deleteDoc(doc.ref);
+    });
+  });
 };

@@ -51,6 +51,7 @@ export const Header = () => {
           <IconButton
             onClick={() => signOut(auth)}
             icon={<CloseIcon />}
+            variant={'ghost'}
             aria-label="sign out"
           />
         )}

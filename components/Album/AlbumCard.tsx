@@ -6,15 +6,8 @@ type Props = {
 
 export const AlbumCard = ({ title }: Props) => {
   return (
-    <VStack>
-      <Box
-        w="24"
-        h="32"
-        cursor={'pointer'}
-        bg="teal"
-        shadow="md"
-        borderRadius="md"
-      >
+    <VStack w="40" h="48" cursor={'pointer'}>
+      <Box w="24" h="32" bg="whiteAlpha.400" shadow="md" borderRadius="md">
         Album
       </Box>
       <Text>{title}</Text>

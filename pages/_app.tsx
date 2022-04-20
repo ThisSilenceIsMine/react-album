@@ -4,6 +4,7 @@ import { RouteGuard } from 'components/RouteGuard';
 import theme from 'lib/theme';
 import { AppProps } from 'next/app';
 import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import '../public/style.css';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
@@ -28,6 +29,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           <Component {...pageProps} />
         </Box>
       </RouteGuard>
+      <Toaster position="bottom-center" />
     </ChakraProvider>
   );
 };

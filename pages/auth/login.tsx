@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { signInWithGoogle } from 'api/firebase/auth/google';
 import { signIn } from 'api/firebase/auth/signIn';
+import { GoogleButton } from 'components/GoogleButton';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -36,9 +37,7 @@ const Login: NextPage = () => {
       <Center height={'full'}>
         <VStack gap="4px">
           <Heading marginBottom="12">Login</Heading>
-          <Button variant="solid" width="full" onClick={onLoginWithGoogle}>
-            Google
-          </Button>
+          <GoogleButton onClick={onLoginWithGoogle} />
           <Input
             placeholder={'mail@mail.com'}
             onChange={(e) => setEmail(e.target.value)}
