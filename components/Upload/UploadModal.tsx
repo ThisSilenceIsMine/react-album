@@ -1,6 +1,9 @@
 import {
   Button,
+  FormControl,
+  FormLabel,
   IconButton,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,23 +15,26 @@ import {
 } from '@chakra-ui/react';
 
 import { Image } from '@chakra-ui/react';
+import { Photo } from 'models/Photo/Photo';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FcUpload } from 'react-icons/fc';
 import { UploadDropzone } from './UploadDropzone';
 
 type Props = {
-  onUpload?: (image: File) => void;
+  onUpload?: (image: Photo) => void;
 };
 
 export const UploadModal = ({ onUpload }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [title, setTitle] = useState('');
 
   const handleClose = useCallback(() => {
     setPreview(null);
     setFile(null);
+    setTitle('');
     onClose();
   }, [onClose, setPreview]);
 
@@ -55,7 +61,11 @@ export const UploadModal = ({ onUpload }: Props) => {
         <ModalContent>
           <ModalHeader>Upload</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody display="flex" flexDir="column" gap="1em">
+            <FormControl>
+              <FormLabel>Title</FormLabel>
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+            </FormControl>
             <UploadDropzone onUpload={handleUpload} />
             {preview && (
               <Image
@@ -70,8 +80,9 @@ export const UploadModal = ({ onUpload }: Props) => {
           <ModalFooter>
             <Button
               mr={'3'}
-              onClick={() => {
-                if (onUpload && file) onUpload(file);
+              onClick={async () => {
+                if (onUpload && file)
+                  onUpload((await Photo.fromFile(file)).setTitle(title));
                 handleClose();
               }}
             >

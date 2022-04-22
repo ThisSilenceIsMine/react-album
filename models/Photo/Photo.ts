@@ -2,8 +2,14 @@ export class Photo {
   constructor(
     public src: string,
     public width: number,
-    public height: number
+    public height: number,
+    public title?: string
   ) {}
+
+  setTitle(title: string) {
+    this.title = title;
+    return this;
+  }
 
   static getImageDimensions(src: string) {
     return new Promise<{ width: number; height: number }>((resolve, reject) => {
