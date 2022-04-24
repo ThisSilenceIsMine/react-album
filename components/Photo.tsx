@@ -8,7 +8,7 @@ export const Photo: RenderPhoto = (props) => {
     <Tooltip hasArrow bg="teal.500" label={rest.title}>
       <Image
         src={src}
-        alt={alt}
+        alt={''}
         {...(srcSet ? { srcSet, sizes } : null)}
         {...rest}
       />
