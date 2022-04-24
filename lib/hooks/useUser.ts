@@ -1,13 +1,15 @@
 import { auth } from 'api';
 import { User } from 'firebase/auth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useUser = () => {
   const [user, setUser] = useState<User | null>(null);
-
-  auth.onAuthStateChanged((user) => {
-    setUser(user);
-  });
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      console.log('user changed');
+      setUser(user);
+    });
+  }, []);
 
   return user;
 };
