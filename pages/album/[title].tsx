@@ -21,14 +21,12 @@ const Album = () => {
 
   useEffect(() => {
     if (!album || Array.isArray(album) || !user) return;
-    getImages(user, album, (photos) => {
+    getImages(user, album, async (photos) => {
       const res = photos.map((p) =>
         PhotoWrapper.fromUrl(p.url).then((photo) => photo.setTitle(p.title))
       );
-      console.log('Before promise all');
-      Promise.all(res).then((photos) => {
-        setPhotos(photos);
-      });
+
+      setPhotos(await Promise.all(res));
     });
   }, [user, album]);
 
