@@ -5,11 +5,13 @@ import { CreateAlbum } from 'components/Album/CreateAlbum';
 import { useUser } from 'lib/hooks/useUser';
 import { createAlbum, subscribeToUserAlbums } from 'models/Album';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 const Home: NextPage = () => {
   const user = useUser();
+  const router = useRouter();
 
   const [albums, setAlbums] = useState<any[]>([]);
 
@@ -17,12 +19,16 @@ const Home: NextPage = () => {
     if (!user) {
       return;
     }
+    let isMounted = true;
 
     const unsubscribe = subscribeToUserAlbums(user, (albums) => {
-      setAlbums(albums);
+      isMounted && setAlbums(albums);
     });
 
-    return unsubscribe;
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
   }, [user]);
 
   const onCreateAlbum = (title: string) => {
@@ -43,8 +49,12 @@ const Home: NextPage = () => {
     <Container maxW="80%" h="full">
       <SimpleGrid pt="12" columns={[2, 4, 6]} spacing="4">
         <CreateAlbum onCreate={onCreateAlbum} />
-        {albums.map((album) => (
-          <AlbumCard key={album.id} title={album.title} />
+        {albums.map(({ id, title }) => (
+          <AlbumCard
+            key={id}
+            title={title}
+            onClick={() => router.push(`/album/${id}`)}
+          />
         ))}
       </SimpleGrid>
     </Container>

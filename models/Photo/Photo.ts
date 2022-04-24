@@ -3,6 +3,7 @@ export class Photo {
     public src: string,
     public width: number,
     public height: number,
+    public file?: File,
     public title?: string
   ) {}
 
@@ -24,9 +25,12 @@ export class Photo {
     });
   }
 
-  static async fromUrl(url: string) {
-    const dimensions = await Photo.getImageDimensions(url);
-    return new Photo(url, dimensions.width, dimensions.height);
+  static fromUrl(src: string) {
+    return new Promise<Photo>((resolve, reject) => {
+      Photo.getImageDimensions(src).then((dimensions) => {
+        resolve(new Photo(src, dimensions.width, dimensions.height));
+      });
+    });
   }
 
   static fromFile(file: File) {
@@ -38,7 +42,8 @@ export class Photo {
             new Photo(
               reader.result as string,
               dimensions.width,
-              dimensions.height
+              dimensions.height,
+              file
             )
           );
         });

@@ -32,7 +32,7 @@ export const subscribeToUserAlbums = (
   const q = query(albumsRef);
 
   const unsubscribe = onSnapshot(q, (snapshot) => {
-    const albums = snapshot.docs.map((doc) => doc.data());
+    const albums = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
     onUpdate(albums);
   });
