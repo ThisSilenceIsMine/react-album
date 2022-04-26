@@ -4,11 +4,13 @@ export class Photo {
     public width: number,
     public height: number,
     public file?: File,
-    public title?: string
+    public createdAt?: number,
+    public title?: string,
+    public description?: string
   ) {}
 
-  setTitle(title: string) {
-    this.title = title;
+  setProperties(properties: Partial<Photo>) {
+    Object.assign(this, properties);
     return this;
   }
 
@@ -26,7 +28,7 @@ export class Photo {
   }
 
   static fromUrl(src: string) {
-    return new Promise<Photo>((resolve, reject) => {
+    return new Promise<Photo>((resolve) => {
       Photo.getImageDimensions(src).then((dimensions) => {
         resolve(new Photo(src, dimensions.width, dimensions.height));
       });
