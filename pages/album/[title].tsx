@@ -26,7 +26,13 @@ const Album = () => {
     if (!album || Array.isArray(album) || !user) return;
     getImages(user, album, async (photos) => {
       const res = photos.map((p) =>
-        PhotoWrapper.fromUrl(p.url).then((photo) => photo.setTitle(p.title))
+        PhotoWrapper.fromUrl(p.url).then((photo) =>
+          photo.setProperties({
+            title: p.title,
+            description: p.description,
+            createdAt: p.createdAt,
+          })
+        )
       );
 
       setPhotos(await Promise.all(res));

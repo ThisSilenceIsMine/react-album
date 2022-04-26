@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Textarea,
   useDisclosure,
 } from '@chakra-ui/react';
 
@@ -30,6 +31,7 @@ export const UploadModal = ({ onUpload }: Props) => {
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleClose = useCallback(() => {
     setPreview(null);
@@ -66,6 +68,13 @@ export const UploadModal = ({ onUpload }: Props) => {
               <FormLabel>Title</FormLabel>
               <Input value={title} onChange={(e) => setTitle(e.target.value)} />
             </FormControl>
+            <FormControl>
+              <FormLabel>Description</FormLabel>
+              <Textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </FormControl>
             <UploadDropzone onUpload={handleUpload} />
             {preview && (
               <Image
@@ -82,7 +91,12 @@ export const UploadModal = ({ onUpload }: Props) => {
               mr={'3'}
               onClick={async () => {
                 if (onUpload && file)
-                  onUpload((await Photo.fromFile(file)).setTitle(title));
+                  onUpload(
+                    (await Photo.fromFile(file)).setProperties({
+                      title,
+                      description,
+                    })
+                  );
                 handleClose();
               }}
             >

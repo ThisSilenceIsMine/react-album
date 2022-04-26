@@ -20,6 +20,7 @@ export const uploadImage = async (user: User, album: string, image: Photo) => {
 
   const image_1 = {
     url,
+    description: image.description,
     title: fileName,
     createdAt: Date.now(),
     owner: user.uid,
