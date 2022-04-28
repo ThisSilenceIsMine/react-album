@@ -5,7 +5,6 @@ import {
   collection,
   deleteDoc,
   DocumentData,
-  DocumentSnapshot,
   getDocs,
   onSnapshot,
   query,

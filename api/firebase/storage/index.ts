@@ -7,10 +7,14 @@ import {
   query,
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { Photo } from 'models/Photo/Photo';
+import { PhotoWrapper } from 'models/Photo/Photo';
 import { db, storage } from '../firebase';
 
-export const uploadImage = async (user: User, album: string, image: Photo) => {
+export const uploadImage = async (
+  user: User,
+  album: string,
+  image: PhotoWrapper
+) => {
   if (!image.file) return false;
   const fileName = image.title ?? image.file.name;
   const imageRef = ref(storage, `${user.uid}/${album}/${image.file.name}`);

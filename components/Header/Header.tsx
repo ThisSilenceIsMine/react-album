@@ -5,6 +5,7 @@ import {
   Heading,
   HStack,
   IconButton,
+  useBoolean,
   useColorModeValue,
 } from '@chakra-ui/react';
 
@@ -15,11 +16,13 @@ import { useEffect, useState } from 'react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { ThemeSwitch } from './ThemeSwitch';
 import { getAvatar } from 'api/getAvatar';
+import { useRouter } from 'next/router';
+import { FcFilledFilter } from 'react-icons/fc';
 
 export const Header = () => {
-  const bg = useColorModeValue('white', 'whiteAlpha.200');
-
   const [user, setUser] = useState<User | null>(null);
+
+  const bg = useColorModeValue('white', 'whiteAlpha.200');
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {

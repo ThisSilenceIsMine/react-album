@@ -16,14 +16,14 @@ import {
 } from '@chakra-ui/react';
 
 import { Image } from '@chakra-ui/react';
-import { Photo } from 'models/Photo/Photo';
+import { PhotoWrapper } from 'models/Photo/Photo';
 
 import { useCallback, useState } from 'react';
 import { FcUpload } from 'react-icons/fc';
 import { UploadDropzone } from './UploadDropzone';
 
 type Props = {
-  onUpload?: (image: Photo) => void;
+  onUpload?: (image: PhotoWrapper) => void;
 };
 
 export const UploadModal = ({ onUpload }: Props) => {
@@ -92,7 +92,7 @@ export const UploadModal = ({ onUpload }: Props) => {
               onClick={async () => {
                 if (onUpload && file)
                   onUpload(
-                    (await Photo.fromFile(file)).setProperties({
+                    (await PhotoWrapper.fromFile(file)).setProperties({
                       title,
                       description,
                     })

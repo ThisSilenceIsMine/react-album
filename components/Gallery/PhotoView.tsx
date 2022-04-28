@@ -10,12 +10,12 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
-import { Photo } from 'models/Photo/Photo';
+import { PhotoWrapper } from 'models/Photo/Photo';
 import { FcDownload } from 'react-icons/fc';
 import { DateTime } from 'luxon';
 
 type Props = {
-  image: Photo | null;
+  image: PhotoWrapper | null;
   isOpen: boolean;
   onClose: () => void;
 };

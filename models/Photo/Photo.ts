@@ -1,4 +1,14 @@
-export class Photo {
+export interface IPhotoWrapper {
+  src: string;
+  width: number;
+  height: number;
+  file?: File;
+  createdAt?: number;
+  title?: string;
+  description?: string;
+}
+
+export class PhotoWrapper implements IPhotoWrapper {
   constructor(
     public src: string,
     public width: number,
@@ -9,7 +19,7 @@ export class Photo {
     public description?: string
   ) {}
 
-  setProperties(properties: Partial<Photo>) {
+  setProperties(properties: Partial<PhotoWrapper>) {
     Object.assign(this, properties);
     return this;
   }
@@ -28,27 +38,29 @@ export class Photo {
   }
 
   static fromUrl(src: string) {
-    return new Promise<Photo>((resolve) => {
-      Photo.getImageDimensions(src).then((dimensions) => {
-        resolve(new Photo(src, dimensions.width, dimensions.height));
+    return new Promise<PhotoWrapper>((resolve) => {
+      PhotoWrapper.getImageDimensions(src).then((dimensions) => {
+        resolve(new PhotoWrapper(src, dimensions.width, dimensions.height));
       });
     });
   }
 
   static fromFile(file: File) {
-    return new Promise<Photo>((resolve, reject) => {
+    return new Promise<PhotoWrapper>((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
-        Photo.getImageDimensions(reader.result as string).then((dimensions) => {
-          resolve(
-            new Photo(
-              reader.result as string,
-              dimensions.width,
-              dimensions.height,
-              file
-            )
-          );
-        });
+        PhotoWrapper.getImageDimensions(reader.result as string).then(
+          (dimensions) => {
+            resolve(
+              new PhotoWrapper(
+                reader.result as string,
+                dimensions.width,
+                dimensions.height,
+                file
+              )
+            );
+          }
+        );
       };
       reader.onerror = () => {
         reject(new Error('Could not load image'));
