@@ -21,8 +21,9 @@ const Home: NextPage = () => {
     }
     let isMounted = true;
 
-    const unsubscribe = subscribeToUserAlbums(user, (albums) => {
-      isMounted && setAlbums(albums);
+    const unsubscribe = subscribeToUserAlbums(user, async (albums) => {
+      isMounted && setAlbums(await albums);
+      console.log(await albums);
     });
 
     return () => {
@@ -49,9 +50,10 @@ const Home: NextPage = () => {
     <Container maxW="80%" h="full">
       <SimpleGrid pt="12" columns={[2, 4, 6]} spacing="4">
         <CreateAlbum onCreate={onCreateAlbum} />
-        {albums.map(({ id, title }) => (
+        {albums.map(({ id, title, preview }) => (
           <AlbumCard
             key={id}
+            src={preview ? preview.url : undefined}
             title={title}
             onClick={() => router.push(`/album/${id}`)}
           />

@@ -24,19 +24,34 @@ export const createAlbum = async (user: User, title: string) => {
 
 export const subscribeToUserAlbums = (
   user: User,
-  onUpdate: (albums: DocumentData[]) => void
+  onUpdate: (albums: Promise<DocumentData[]>) => void
 ) => {
   const albumsRef = collection(db, 'users', user.uid, 'albums');
 
   const q = query(albumsRef);
 
   const unsubscribe = onSnapshot(q, (snapshot) => {
-    const albums = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    const albums = snapshot.docs.map(async (doc) => ({
+      ...doc.data(),
+      id: doc.id,
+      preview: await loadAlbumPreview(user, doc.id),
+    }));
 
-    onUpdate(albums);
+    onUpdate(Promise.all(albums));
   });
 
   return unsubscribe;
+};
+
+export const loadAlbumPreview = async (user: User, album: string) => {
+  const images = collection(db, 'users', user.uid, 'albums', album, 'photos');
+
+  const imagesSnap = await getDocs(images);
+
+  return imagesSnap.docs
+    .slice(0, -1)
+    .map((doc) => doc.data())
+    .at(0);
 };
 
 export const deleteUserAlbum = async (user: User, title: string) => {
