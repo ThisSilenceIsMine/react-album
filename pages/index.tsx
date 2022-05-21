@@ -3,7 +3,7 @@ import { AlbumCard } from 'components/Album/AlbumCard';
 
 import { CreateAlbum } from 'components/Album/CreateAlbum';
 import { useUser } from 'lib/hooks/useUser';
-import { createAlbum, subscribeToUserAlbums } from 'models/Album';
+import { Album, createAlbum, subscribeToUserAlbums } from 'models/Album/Album';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -13,7 +13,7 @@ const Home: NextPage = () => {
   const user = useUser();
   const router = useRouter();
 
-  const [albums, setAlbums] = useState<any[]>([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
 
   useEffect(() => {
     if (!user) {
@@ -22,8 +22,9 @@ const Home: NextPage = () => {
     let isMounted = true;
 
     const unsubscribe = subscribeToUserAlbums(user, async (albums) => {
-      isMounted && setAlbums(await albums);
-      console.log(await albums);
+      if (isMounted) {
+        setAlbums(await albums);
+      }
     });
 
     return () => {
@@ -50,10 +51,10 @@ const Home: NextPage = () => {
     <Container maxW="80%" h="full">
       <SimpleGrid pt="12" columns={[2, 4, 6]} spacing="4">
         <CreateAlbum onCreate={onCreateAlbum} />
-        {albums.map(({ id, title, preview }) => (
+        {albums.map(({ id, title, image }) => (
           <AlbumCard
             key={id}
-            src={preview ? preview.url : undefined}
+            src={image}
             title={title}
             onClick={() => router.push(`/album/${id}`)}
           />

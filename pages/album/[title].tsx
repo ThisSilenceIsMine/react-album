@@ -38,8 +38,6 @@ const Album = () => {
     });
   });
 
-  console.log(filter);
-
   const onUpload = async (image: PhotoWrapper) => {
     if (!album || Array.isArray(album) || !user) return;
     uploadImage(user, album, image);
