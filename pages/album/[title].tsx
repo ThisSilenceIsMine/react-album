@@ -6,7 +6,7 @@ import { PhotoWrapper } from 'models/Photo/Photo';
 import PhotoAlbum, { Photo } from 'react-photo-album';
 import RednerPhoto from 'components/Photo';
 import { Column } from 'components/Column';
-import { getImages, uploadImage } from 'api/firebase/storage';
+import { getImages, updateImage, uploadImage } from 'api/firebase/storage';
 import { useUser } from 'lib/hooks/useUser';
 import { PhotoView } from 'components/Gallery/PhotoView';
 import { Filter } from 'components/Filter';
@@ -19,7 +19,7 @@ const Album = () => {
   const [filter, setFilter] = useState<Filter>({});
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const { title: album } = useRouter().query;
+  const { title: album } = useRouter().query as { title: string };
   const user = useUser();
 
   const filteredPhotos = photos.filter((photo) => {
@@ -87,6 +87,12 @@ const Album = () => {
         isOpen={!!selected}
         onClose={() => setSelected(null)}
         image={selected}
+        onUpdate={(data) =>
+          user &&
+          selected &&
+          selected.title &&
+          updateImage(user, album, selected.title!, data)
+        }
       />
     </Container>
   );

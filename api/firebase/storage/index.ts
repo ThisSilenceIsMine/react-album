@@ -1,10 +1,16 @@
+import { AlertTitleProps } from '@chakra-ui/react';
 import { User } from 'firebase/auth';
 import {
   addDoc,
   collection,
+  doc,
   DocumentData,
+  getDoc,
+  getDocs,
   onSnapshot,
   query,
+  updateDoc,
+  where,
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { PhotoWrapper } from 'models/Photo/Photo';
@@ -50,4 +56,21 @@ export const getImages = async (
   });
 
   return unsubscribe;
+};
+
+export const updateImage = async (
+  user: User,
+  album: string,
+  image: string,
+  data: Partial<PhotoWrapper>
+) => {
+  const images = collection(db, 'users', user.uid, 'albums', album, 'photos');
+
+  const q = query(images, where('title', '==', image));
+
+  getDocs(q).then((snap) => {
+    snap.docs.forEach((doc) => {
+      updateDoc(doc.ref, data);
+    });
+  });
 };
